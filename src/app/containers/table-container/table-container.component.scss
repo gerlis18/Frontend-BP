@@ -1,0 +1,18 @@
+.table-container {
+  margin-top: 80px;
+  padding-right: 40px;
+  padding-left: 40px;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+
+  & input {
+    height: 35px;
+    border: 2px solid #E4E4E4;
+    border-radius: 6px;
+  }
+}

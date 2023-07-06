@@ -1,0 +1,32 @@
+<div class="container">
+  <table class="table">
+    <thead class="table__head">
+      <tr>
+        <th>Logo</th>
+        <th>Nombre del producto</th>
+        <th>Descripción <span>&#8505;</span></th>
+        <th>Fecha de liberación <span>&#8505;</span></th>
+        <th>Fecha de restructuración <span>&#8505;</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="table__body">
+      <tr *ngFor="let product of productList">
+        <td>
+          <img src="" alt="logo">
+        </td>
+        <td>{{product.name}}</td>
+        <td>{{product.description}}</td>
+        <td>{{product.date_release}}</td>
+        <td>{{product.date_revision}}</td>
+        <td>&#8942;</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-footer">
+    <span>{{productList?.length}} Resultados</span>
+    <select name="rows" id="">
+      <option value="1">1</option>
+    </select>
+  </div>
+</div>

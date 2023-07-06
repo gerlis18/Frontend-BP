@@ -1,0 +1,9 @@
+<app-header></app-header>
+
+<div class="table-container">
+  <div class="table-controls">
+    <input type="search" placeholder="Search...">
+    <button type="button">Agregar</button>
+  </div>
+  <app-table [productList]="productList$ | async"></app-table>
+</div>
