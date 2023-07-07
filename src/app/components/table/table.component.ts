@@ -4,6 +4,7 @@ import {Store} from "@ngxs/store";
 import {RemoveProduct} from "../../store/product.actions";
 import {Router} from "@angular/router";
 import {FormControl} from "@angular/forms";
+import {catchError, of, throwError} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -26,12 +27,14 @@ export class TableComponent implements OnInit {
         if (value) {
           this.pagination = value;
         }
-    });
+      });
   }
 
   toggleMenu(menu: HTMLDivElement) {
     document.querySelectorAll('.menu').forEach((item: Element) => {
+      if (item.getAttribute('id') !== menu.getAttribute('id')) {
         item.classList.add('hide-menu');
+      }
     });
     menu.classList.toggle('hide-menu');
   }
@@ -40,8 +43,13 @@ export class TableComponent implements OnInit {
     const response = confirm('Deseas eliminar este producto?');
     if (response) {
       this.store.dispatch(new RemoveProduct(product.id))
-        .subscribe(() => {
-          alert('Product removed');
+        .subscribe({
+          next: () => {
+            alert('Producto eliminado con éxito');
+          },
+          error: () => {
+            alert('ha ocurrido un error');
+          }
         });
     }
   }

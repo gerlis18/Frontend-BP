@@ -4,6 +4,7 @@ import {ProductStateModel} from "./product-state-model";
 import {DataService} from "../services/data.service";
 import {AddProduct, LoadProducts, RemoveProduct, UpdateProduct} from "./product.actions";
 import {Product} from "../models/product";
+import {catchError, tap, throwError} from "rxjs";
 
 @State<ProductStateModel>({
   name: 'products',
@@ -36,15 +37,18 @@ export class ProductsState {
   @Action(RemoveProduct)
   removeProduct(ctx: StateContext<ProductStateModel>, action: RemoveProduct) {
     const state = ctx.getState();
-    this.dataService.deleteProduct(action.id)
-      .subscribe({
-        next: () => {
+    return this.dataService.deleteProduct(action.id)
+      .pipe(
+        tap(() => {
           ctx.setState({
             ...state,
             list: state.list.filter(item => item.id !== action.id)
           })
-        }
-      });
+        }),
+        catchError(err => {
+          return throwError(err);
+        })
+      )
   }
 
   @Action(UpdateProduct)

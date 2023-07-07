@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody class="table__body">
-      <tr *ngFor="let product of productList | slice: 0: pagination">
+      <tr *ngFor="let product of productList | slice: 0: pagination; index as ind">
         <td>
           <img width="40" [src]="product.logo" alt="logo">
         </td>
@@ -20,10 +20,10 @@
         <td>{{product.date_release | date: 'dd/MM/yyyy'}}</td>
         <td>{{product.date_revision | date: 'dd/MM/yyyy'}}</td>
         <td style="position: relative;">
-          <button (click)="toggleMenu(menu)">&#8942;</button>
-          <div #menu class="menu hide-menu">
-              <button (click)="updateProduct(product)">Editar</button>
-              <button (click)="removeProduct(product)">Eliminar</button>
+          <button id="toggleMenu" (click)="toggleMenu(menu)">&#8942;</button>
+          <div #menu class="menu hide-menu" [id]="ind">
+              <button id="editButton" (click)="updateProduct(product)">Editar</button>
+              <button id="deleteButton" (click)="removeProduct(product)">Eliminar</button>
           </div>
         </td>
       </tr>

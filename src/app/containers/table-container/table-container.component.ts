@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {map, Observable, of, startWith, switchMap} from "rxjs";
+import {map, Observable, of, startWith, switchMap, tap} from "rxjs";
 import {Product} from "../../models/product";
 import {Router} from "@angular/router";
 import {Select, Store} from "@ngxs/store";
@@ -27,12 +27,7 @@ export class TableContainerComponent implements OnInit {
       .pipe(
         startWith(''),
         switchMap(value => {
-          if (value && value.length > 2) {
-            const text = value.toLowerCase();
-            return this.searchProducts(text);
-          } else {
-            return this.productList$;
-          }
+          return this.searchProducts(value || '')
         }),
       )
   }

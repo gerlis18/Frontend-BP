@@ -44,9 +44,7 @@ export class UpdateContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadProduct(product: Product | null) {
-    if (!product) return;
-
+  loadProduct(product: Product) {
     this.formValue = {
       id: product.id,
       name: product.name,
