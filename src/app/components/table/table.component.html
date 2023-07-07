@@ -11,22 +11,30 @@
       </tr>
     </thead>
     <tbody class="table__body">
-      <tr *ngFor="let product of productList">
+      <tr *ngFor="let product of productList | slice: 0: pagination">
         <td>
-          <img src="" alt="logo">
+          <img width="40" [src]="product.logo" alt="logo">
         </td>
         <td>{{product.name}}</td>
         <td>{{product.description}}</td>
-        <td>{{product.date_release}}</td>
-        <td>{{product.date_revision}}</td>
-        <td>&#8942;</td>
+        <td>{{product.date_release | date: 'dd/MM/yyyy'}}</td>
+        <td>{{product.date_revision | date: 'dd/MM/yyyy'}}</td>
+        <td style="position: relative;">
+          <button (click)="toggleMenu(menu)">&#8942;</button>
+          <div #menu class="menu hide-menu">
+              <button (click)="updateProduct(product)">Editar</button>
+              <button (click)="removeProduct(product)">Eliminar</button>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
   <div class="table-footer">
     <span>{{productList?.length}} Resultados</span>
-    <select name="rows" id="">
-      <option value="1">1</option>
+    <select name="rows" id="pagination" [formControl]="paginationControl">
+      <option value="5">5</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
     </select>
   </div>
 </div>

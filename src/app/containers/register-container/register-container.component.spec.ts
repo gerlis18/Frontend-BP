@@ -1,29 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableContainerComponent } from './table-container.component';
+import { RegisterContainerComponent } from './register-container.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {NgxsModule} from "@ngxs/store";
 import {ProductsState} from "../../store/products.state";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {HeaderComponent} from "../../components/header/header.component";
-import {TableComponent} from "../../components/table/table.component";
+import {RegisterFormComponent} from "../../components/register-form/register-form.component";
 import {ReactiveFormsModule} from "@angular/forms";
 
-describe('TableContainerComponent', () => {
-  let component: TableContainerComponent;
-  let fixture: ComponentFixture<TableContainerComponent>;
+describe('RegisterContainerComponent', () => {
+  let component: RegisterContainerComponent;
+  let fixture: ComponentFixture<RegisterContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableContainerComponent, HeaderComponent, TableComponent ],
+      declarations: [ RegisterContainerComponent, HeaderComponent, RegisterFormComponent ],
       imports: [
-        NgxsModule.forRoot([ProductsState]),
         HttpClientTestingModule,
+        NgxsModule.forRoot([ProductsState]),
         ReactiveFormsModule
       ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TableContainerComponent);
+    fixture = TestBed.createComponent(RegisterContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

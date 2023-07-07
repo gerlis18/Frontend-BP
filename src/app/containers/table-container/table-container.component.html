@@ -2,8 +2,8 @@
 
 <div class="table-container">
   <div class="table-controls">
-    <input type="search" placeholder="Search...">
-    <button type="button">Agregar</button>
+    <input [formControl]="searchControl" type="search" placeholder="Search...">
+    <button class="button-primary" type="button" (click)="addProduct()">Agregar</button>
   </div>
-  <app-table [productList]="productList$ | async"></app-table>
+  <app-table [productList]="productListFilter$ | async"></app-table>
 </div>

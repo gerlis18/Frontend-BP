@@ -1,0 +1,6 @@
+<app-header></app-header>
+
+<div class="update-container">
+<app-register-form *ngIf="formValue" [formValue]="formValue" (onSubmit)="updateProduct($event)"></app-register-form>
+<h3 *ngIf="!formValue">Id no existe</h3>
+</div>

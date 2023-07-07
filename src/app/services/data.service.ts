@@ -10,7 +10,7 @@ export class DataService {
 
   private BASE_URL = 'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products';
   private headers = new HttpHeaders({
-    authorId: 91232
+    authorId: 1239082
   });
 
   constructor(private http: HttpClient) { }
@@ -28,7 +28,7 @@ export class DataService {
   }
 
   deleteProduct(productId: string) {
-    return this.http.get(this.BASE_URL, {
+    return this.http.delete(this.BASE_URL, {
       headers: this.headers,
       params: {
         id: productId

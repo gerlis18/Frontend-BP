@@ -1,0 +1,42 @@
+<div class="register-form">
+  <form class="register-form__container" [formGroup]="registerForm" (ngSubmit)="submitEvent()">
+    <div class="register-form__title">
+      <span>Formulario de Registro</span>
+    </div>
+    <div class="register-form__form">
+      <div class="register-form__control">
+        <label for="id">ID</label>
+        <input formControlName="id" type="text" id="id"/>
+        <span [hidden]="registerForm.get('id')?.valid || registerForm.get('id')?.pristine">ID no valido</span>
+      </div>
+      <div class="register-form__control">
+        <label for="name">Nombre</label>
+        <input formControlName="name" type="text" id="name"/>
+        <span>Este campo es requerido</span>
+      </div>
+      <div class="register-form__control">
+        <label for="description">Descripcion</label>
+        <input formControlName="description" type="text" id="description"/>
+        <span>Este campo es requerido</span>
+      </div>
+      <div class="register-form__control">
+        <label for="logo">Logo</label>
+        <input formControlName="logo" type="text" id="logo"/>
+        <span>Este campo es requerido</span>
+      </div>
+      <div class="register-form__control">
+        <label for="dateRelease">Fecha Liberacion</label>
+        <input formControlName="dateRelease" type="date" id="dateRelease"/>
+        <span>Este campo es requerido</span>
+      </div>
+      <div class="register-form__control">
+        <label for="dateRevision">Fecha Revision</label>
+        <input formControlName="dateRevision" type="date" id="dateRevision"/>
+      </div>
+    </div>
+    <div class="register-form__buttons">
+      <button class="button-secondary" type="button" (click)="resetForm()">Reiniciar</button>
+      <button class="button-primary" [disabled]="registerForm.invalid" type="submit">Enviar</button>
+    </div>
+  </form>
+</div>

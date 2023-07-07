@@ -1,4 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+* {
+  font-family: Roboto;
+}
+
 body {
   background-color: #F5F6FA;
   padding: 0;
@@ -6,15 +12,42 @@ body {
 }
 
 button {
-  background-color: #F9DE47;
   border: none;
   padding: 15px;
   border-radius: 4px;
-  color: #6A6A6C;
   font-weight: 600;
   cursor: pointer;
 }
 
+.button-primary {
+  color: #6A6A6C;
+  background-color: #F9DE47;
+  &:disabled {
+    background-color: #FFF199;
+    cursor: not-allowed;
+    color: #D7D3A8;
+  }
+}
+
+.button-secondary {
+  background-color: #E9ECF3;
+  color: #717E9F;
+  font-weight: 700;
+}
+
 input {
 
+}
+
+.ng-invalid:not(form) {
+  border: 2px solid red !important;
+  & + span {
+    color: red;
+    font-size: 12px;
+    display: block;
+  }
+}
+
+.ng-valid:not(form) + span {
+  visibility: hidden;
 }

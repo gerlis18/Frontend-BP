@@ -55,3 +55,30 @@
   display: flex;
   justify-content: space-between;
 }
+
+.menu {
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: #fff;
+  left: -40px;
+  top: 31px;
+  position: absolute;
+  z-index: 2;
+
+
+  & button {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: #6A6A6C 0px 0px 3px 0px;
+    border-radius: unset;
+    background-color: #fff;
+    border-bottom: none;
+  }
+}
+
+.hide-menu {
+  display: none;
+}
