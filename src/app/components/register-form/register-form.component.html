@@ -7,31 +7,39 @@
       <div class="register-form__control">
         <label for="id">ID</label>
         <input formControlName="id" type="text" id="id"/>
-        <span [hidden]="registerForm.get('id')?.valid || registerForm.get('id')?.pristine">ID no valido</span>
+        <span *ngIf="registerForm.get('id')?.hasError('idInvalid')">ID no valido</span>
+        <span *ngIf="registerForm.get('id')?.hasError('required')">Este campo es requerido</span>
+        <span *ngIf="registerForm.get('id')?.hasError('minlength')">Min 3 Caracteres</span>
+        <span *ngIf="registerForm.get('id')?.hasError('maxlength')">Max 10 Caracteres</span>
       </div>
       <div class="register-form__control">
         <label for="name">Nombre</label>
         <input formControlName="name" type="text" id="name"/>
-        <span>Este campo es requerido</span>
+        <span *ngIf="registerForm.get('name')?.hasError('required')">Este campo es requerido</span>
+        <span *ngIf="registerForm.get('name')?.hasError('minlength')">Min 5 Caracteres</span>
+        <span *ngIf="registerForm.get('name')?.hasError('maxlength')">Max 100 Caracteres</span>
       </div>
       <div class="register-form__control">
         <label for="description">Descripcion</label>
         <input formControlName="description" type="text" id="description"/>
-        <span>Este campo es requerido</span>
+        <span *ngIf="registerForm.get('description')?.hasError('required')">Este campo es requerido</span>
+        <span *ngIf="registerForm.get('description')?.hasError('minlength')">Min 10 Caracteres</span>
+        <span *ngIf="registerForm.get('description')?.hasError('maxlength')">Max 200 Caracteres</span>
       </div>
       <div class="register-form__control">
         <label for="logo">Logo</label>
         <input formControlName="logo" type="text" id="logo"/>
-        <span>Este campo es requerido</span>
+        <span *ngIf="registerForm.get('logo')?.hasError('required')">Este campo es requerido</span>
       </div>
       <div class="register-form__control">
         <label for="dateRelease">Fecha Liberacion</label>
-        <input formControlName="dateRelease" type="date" id="dateRelease"/>
-        <span>Este campo es requerido</span>
+        <input formControlName="dateRelease" [min]="minDate" type="date" id="dateRelease"/>
+        <span *ngIf="registerForm.get('dateRelease')?.hasError('required')">Este campo es requerido</span>
       </div>
       <div class="register-form__control">
         <label for="dateRevision">Fecha Revision</label>
         <input formControlName="dateRevision" type="date" id="dateRevision"/>
+        <span *ngIf="registerForm.get('dateRevision')?.hasError('required')">Este campo es requerido</span>
       </div>
     </div>
     <div class="register-form__buttons">

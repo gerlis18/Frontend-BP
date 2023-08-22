@@ -30,7 +30,8 @@ describe('ProductsState', () => {
         date_revision: '02/02/2023'
       }
     ],
-    loaded: true
+    loaded: true,
+    pagination: 5
   };
 
   beforeEach(() => {

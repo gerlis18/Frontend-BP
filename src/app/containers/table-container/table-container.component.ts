@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {map, Observable, of, startWith, switchMap, tap} from "rxjs";
+import {map, Observable, startWith, switchMap} from "rxjs";
 import {Product} from "../../models/product";
 import {Router} from "@angular/router";
 import {Select, Store} from "@ngxs/store";
-import {LoadProducts} from "../../store/product.actions";
+import {LoadProducts, RemoveProduct, UpdatePagination} from "../../store/product.actions";
 import {ProductsState} from "../../store/products.state";
 import {FormControl} from "@angular/forms";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-table-container',
@@ -15,6 +16,7 @@ import {FormControl} from "@angular/forms";
 export class TableContainerComponent implements OnInit {
 
   @Select(ProductsState.products) productList$!: Observable<Product[]>;
+  @Select(ProductsState.paginationCount) pagination$!: Observable<number>;
   searchControl = new FormControl('');
   productListFilter$!: Observable<Product[]>;
 
@@ -43,7 +45,30 @@ export class TableContainerComponent implements OnInit {
   }
 
   addProduct() {
-    this.router.navigate(['/add-product'])
+    this.router.navigate(['/add-product']);
+  }
+
+  removeProduct(product: Product) {
+    const response = confirm('Deseas eliminar este producto?');
+    if (response) {
+      this.store.dispatch(new RemoveProduct(product.id))
+        .subscribe({
+          next: () => {
+            alert('Producto eliminado con éxito');
+          },
+          error: (error: HttpErrorResponse) => {
+            alert(error.error);
+          }
+        });
+    }
+  }
+
+  updateProduct(product: Product) {
+    this.router.navigate(['/update-product', product.id]);
+  }
+
+  paginationChange(value: number) {
+    this.store.dispatch(new UpdatePagination(value));
   }
 
 }

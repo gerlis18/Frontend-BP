@@ -35,4 +35,13 @@ export class DataService {
       }
     });
   }
+
+  idVerification(id: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.BASE_URL}/verification`, {
+      headers: this.headers,
+      params: {
+        id
+      }
+    });
+  }
 }

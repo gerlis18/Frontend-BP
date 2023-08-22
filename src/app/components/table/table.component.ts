@@ -1,10 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../models/product";
-import {Store} from "@ngxs/store";
-import {RemoveProduct} from "../../store/product.actions";
-import {Router} from "@angular/router";
 import {FormControl} from "@angular/forms";
-import {catchError, of, throwError} from "rxjs";
 
 @Component({
   selector: 'app-table',
@@ -14,18 +10,22 @@ import {catchError, of, throwError} from "rxjs";
 export class TableComponent implements OnInit {
 
   @Input() productList!: Product[] | null;
-  pagination = 5;
-  paginationControl = new FormControl(this.pagination);
+  @Input() pagination!: number | null;
+  @Output() remove = new EventEmitter<Product>();
+  @Output() update = new EventEmitter<Product>();
+  @Output() paginationChange = new EventEmitter<number>();
+  paginationControl = new FormControl();
 
-  constructor(private store: Store, private router: Router) {
+  constructor() {
   }
 
   ngOnInit() {
+    this.paginationControl.setValue(this.pagination)
     this.paginationControl
       .valueChanges
       .subscribe((value: number | null) => {
         if (value) {
-          this.pagination = value;
+          this.paginationChange.emit(value);
         }
       });
   }
@@ -39,23 +39,13 @@ export class TableComponent implements OnInit {
     menu.classList.toggle('hide-menu');
   }
 
-  removeProduct(product: Product) {
-    const response = confirm('Deseas eliminar este producto?');
-    if (response) {
-      this.store.dispatch(new RemoveProduct(product.id))
-        .subscribe({
-          next: () => {
-            alert('Producto eliminado con éxito');
-          },
-          error: () => {
-            alert('ha ocurrido un error');
-          }
-        });
-    }
+  removeEvent(product: Product, menuElement: any) {
+    this.remove.emit(product);
+    this.toggleMenu(menuElement);
   }
 
-  updateProduct(product: Product) {
-    this.router.navigate(['/update-product', product.id]);
+  updateEvent(product: Product) {
+    this.update.emit(product);
   }
 
 

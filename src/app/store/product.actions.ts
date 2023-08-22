@@ -20,3 +20,7 @@ export class AddProduct {
   constructor(public product: Product) {}
 }
 
+export class UpdatePagination {
+  static readonly type = '[Product] Update pagination';
+  constructor(public pagination: number) {}
+}

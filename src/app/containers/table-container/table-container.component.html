@@ -5,5 +5,11 @@
     <input [formControl]="searchControl" type="search" placeholder="Search...">
     <button class="button-primary" type="button" (click)="addProduct()">Agregar</button>
   </div>
-  <app-table [productList]="productListFilter$ | async"></app-table>
+  <app-table
+    [productList]="productListFilter$ | async"
+    [pagination]="pagination$ | async"
+    (remove)="removeProduct($event)"
+    (update)="updateProduct($event)"
+    (paginationChange)="paginationChange($event)"
+  ></app-table>
 </div>

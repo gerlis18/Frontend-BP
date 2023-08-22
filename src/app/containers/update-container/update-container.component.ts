@@ -6,6 +6,7 @@ import {Select, Store} from "@ngxs/store";
 import {Observable, Subject, takeUntil} from "rxjs";
 import {ProductStateModel} from "../../store/product-state-model";
 import {Product} from "../../models/product";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-update-container',
@@ -62,7 +63,15 @@ export class UpdateContainerComponent implements OnInit, OnDestroy {
   updateProduct(product: Product) {
     this.store.dispatch(new UpdateProduct(product))
       .pipe(takeUntil(this.ngOnDestroy$))
-      .subscribe(() => this.router.navigate(['/']))
+      .subscribe({
+        next: () => {
+          alert('Product updated successfully');
+          this.router.navigate(['/'])
+        },
+        error: (error: HttpErrorResponse) => {
+          alert(error.error)
+        }
+      })
   }
 
   ngOnDestroy() {

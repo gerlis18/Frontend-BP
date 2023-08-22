@@ -1,10 +1,10 @@
 import {Component, OnDestroy} from '@angular/core';
 import {Product} from "../../models/product";
-import {DataService} from "../../services/data.service";
 import {Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import {AddProduct} from "../../store/product.actions";
 import {Store} from "@ngxs/store";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-register-container',
@@ -15,7 +15,6 @@ export class RegisterContainerComponent implements OnDestroy {
 
   private ngOnDestroy$ = new Subject<void>();
   constructor(
-    private dataService: DataService,
     private router: Router,
     private store: Store) {
   }
@@ -24,11 +23,16 @@ export class RegisterContainerComponent implements OnDestroy {
   addProduct(product: Product) {
     this.store.dispatch(new AddProduct(product))
       .pipe(
-        takeUntil(this.ngOnDestroy$)
+        takeUntil(this.ngOnDestroy$),
       )
-      .subscribe(()=> {
-        alert('Product created successfully');
-        this.router.navigate(['/'])
+      .subscribe({
+        next: ()=> {
+          alert('Product created successfully');
+          this.router.navigate(['/'])
+        },
+        error: (error: HttpErrorResponse) => {
+          alert(error.error);
+        }
       });
   }
 

@@ -2,15 +2,16 @@ import {Injectable} from "@angular/core";
 import {Action, createSelector, Selector, State, StateContext} from "@ngxs/store";
 import {ProductStateModel} from "./product-state-model";
 import {DataService} from "../services/data.service";
-import {AddProduct, LoadProducts, RemoveProduct, UpdateProduct} from "./product.actions";
+import {AddProduct, LoadProducts, RemoveProduct, UpdatePagination, UpdateProduct} from "./product.actions";
 import {Product} from "../models/product";
-import {catchError, tap, throwError} from "rxjs";
+import {tap} from "rxjs";
 
 @State<ProductStateModel>({
   name: 'products',
   defaults: {
     list: [],
-    loaded: false
+    loaded: false,
+    pagination: 5
   }
 })
 @Injectable()
@@ -28,7 +29,7 @@ export class ProductsState {
           ctx.setState({
             ...state,
             list,
-            loaded: true
+            loaded: true,
           })
         }
       });
@@ -44,9 +45,6 @@ export class ProductsState {
             ...state,
             list: state.list.filter(item => item.id !== action.id)
           })
-        }),
-        catchError(err => {
-          return throwError(err);
         })
       )
   }
@@ -54,34 +52,46 @@ export class ProductsState {
   @Action(UpdateProduct)
   updateProduct(ctx: StateContext<ProductStateModel>, action: UpdateProduct) {
     const state = ctx.getState();
-    this.dataService.updateProduct(action.product)
-      .subscribe({
-        next: () => {
+    return this.dataService.updateProduct(action.product)
+      .pipe(
+        tap(() => {
           ctx.setState({
             ...state,
             list: state.list.map(item => item.id === action.product.id ? action.product : item)
           })
-        }
-      });
+        })
+      );
   }
 
   @Action(AddProduct)
-  addProduct(ctx: StateContext<ProductStateModel>, action: UpdateProduct) {
+  addProduct(ctx: StateContext<ProductStateModel>, action: AddProduct) {
     const state = ctx.getState();
-    this.dataService.createProduct(action.product)
-      .subscribe({
-        next: () => {
+    return this.dataService.createProduct(action.product)
+      .pipe(
+        tap(() => {
           ctx.setState({
             ...state,
             list: [...state.list, action.product]
           })
-        }
-      });
+        }),
+      );
+  }
+
+  @Action(UpdatePagination)
+  updatePaginationAction(ctx: StateContext<ProductStateModel>, action: UpdatePagination) {
+    ctx.patchState({
+      pagination: action.pagination
+    })
   }
 
   @Selector()
   static products(state: ProductStateModel) {
     return state.list;
+  }
+
+  @Selector()
+  static paginationCount(state: ProductStateModel) {
+    return state.pagination;
   }
 
   static getProduct(id: string | null) {

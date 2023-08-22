@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Product} from "../../models/product";
+import {IdValidator} from "./id.validator";
+import {DataService} from "../../services/data.service";
 
 @Component({
   selector: 'app-register-form',
@@ -10,12 +12,15 @@ import {Product} from "../../models/product";
 export class RegisterFormComponent implements OnInit {
 
   registerForm!: FormGroup;
-  @Output() onSubmit: EventEmitter<Product> = new EventEmitter();
+  @Output() onSubmit = new EventEmitter<Product>();
   @Input() formValue: any;
+  minDate!: string;
 
   constructor(
     private formBuilder: FormBuilder,
+    private dataService: DataService
   ) {
+    this.minDate = this.getMinDate();
   }
 
   ngOnInit() {
@@ -23,14 +28,24 @@ export class RegisterFormComponent implements OnInit {
     if (this.formValue) {
       this.registerForm.setValue(this.formValue);
       this.registerForm.get('id')?.disable();
+    } else {
+      this.registerForm.get('id')?.setAsyncValidators(IdValidator.createValidator(this.dataService));
     }
+  }
+
+  getMinDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   createForm() {
     this.registerForm = this.formBuilder.group({
-      id: [null, Validators.required],
-      name: [null, Validators.required],
-      description: [null, Validators.required],
+      id: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
+      name: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+      description: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
       logo: [null, Validators.required],
       dateRelease: [null, Validators.required],
       dateRevision: [{value: null, disabled: true}, Validators.required],

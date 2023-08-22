@@ -8,15 +8,18 @@ import {HeaderComponent} from "../../components/header/header.component";
 import {TableComponent} from "../../components/table/table.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {DataService} from "../../services/data.service";
-import {of} from "rxjs";
+import {of, throwError} from "rxjs";
 import {RouterTestingModule} from "@angular/router/testing";
 import {Route, Router} from "@angular/router";
 import {RegisterContainerComponent} from "../register-container/register-container.component";
 import {Location} from "@angular/common";
+import {LoadProducts} from "../../store/product.actions";
+import {UpdateContainerComponent} from "../update-container/update-container.component";
 
 const routes: Route[] = [
   { path: '', component: TableContainerComponent },
   { path: 'add-product', component: RegisterContainerComponent },
+  {path: 'update-product/:productId', component: UpdateContainerComponent}
 ];
 
 describe('TableContainerComponent', () => {
@@ -89,5 +92,65 @@ describe('TableContainerComponent', () => {
     component.addProduct();
     tick()
     expect(location.path()).toBe('/add-product');
+  }));
+
+  it('should remove a product', () => {
+
+    store.dispatch(new LoadProducts());
+    const product = {
+      id: '1',
+      name: 'Product 1',
+      description: 'Description 1',
+      logo: 'Logo 1',
+      date_release: '02/02/2022',
+      date_revision: '02/02/2023'
+    };
+    spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(dataService, 'getProducts').and.returnValue(of([product]));
+    const serviceSpy = spyOn(dataService, 'deleteProduct').and.returnValue(of({}));
+    component.removeProduct(product);
+    const state = store.selectSnapshot(state => state.products);
+    expect(serviceSpy).toHaveBeenCalledWith('1');
+    expect(state.list.length).toBe(0);
+  });
+
+  it('should throw an error when removing a product', fakeAsync(() => {
+
+    const product = {
+      id: '1',
+      name: 'Product 1',
+      description: 'Description 1',
+      logo: 'Logo 1',
+      date_release: '02/02/2022',
+      date_revision: '02/02/2023'
+    };
+    store.reset({
+      ...store.snapshot(),
+      products: {
+        list: [product],
+        loaded: true
+      }
+    });
+    spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(dataService, 'deleteProduct')
+      .and
+      .returnValue(throwError(() => new Error('fallo')));
+    component.removeProduct(product);
+    const state = store.selectSnapshot(state => state.products);
+    expect(state.list.length).toBe(1);
+  }));
+
+  it('should navigate to update product view', fakeAsync(() => {
+    const product = {
+      id: '1',
+      name: 'Product 1',
+      description: 'Description 1',
+      logo: 'Logo 1',
+      date_release: '02/02/2022',
+      date_revision: '02/02/2023'
+    };
+    component.updateProduct(product);
+    tick();
+    expect(location.path()).toBe('/update-product/1');
   }));
 });
